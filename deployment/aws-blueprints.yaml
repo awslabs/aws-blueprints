@@ -1,0 +1,180 @@
+
+# merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
+# permit persons to whom the Software is furnished to do so.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+# INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+# PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+# HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+# OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+# SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+AWSTemplateFormatVersion: "2010-09-09"
+Description: This template creates a portfolio that contains business applications with constraints and shares it with an AWS IAM group.
+Parameters:
+  Owner:
+    Description: Partner name
+    Type: String
+    AllowedPattern : '[a-zA-Z0-9]*'
+  Distributor:
+    Description: Partner name
+    Type: String
+    AllowedPattern : '[a-zA-Z0-9]*'
+  SupportDescription:
+    Description: SupportDescription
+    Type: String
+    AllowedPattern : '[a-zA-Z0-9]*'
+  SupportEmail:
+    Description: SupportEmail
+    Type: String
+    AllowedPattern: '[a-zA-Z0-9@.]*'
+  SupportUrl:
+    Description: SupportUrl
+    Type: String
+Resources:
+  BusinessApplicationPortfolio:
+    Type: "AWS::ServiceCatalog::Portfolio"
+    Properties:
+      Description: "A portfolio of self-service business applications."
+      DisplayName: "Business Application Portfolio"
+      ProviderName: !Ref Owner
+  EngineeringGroup:
+    Type: "AWS::IAM::Group"
+    Properties:
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AWSServiceCatalogEndUserFullAccess
+  BusinessApplicationPortfolioPrincipalAssociation:
+      Type: "AWS::ServiceCatalog::PortfolioPrincipalAssociation"
+      Properties:
+        PortfolioId: !Ref BusinessApplicationPortfolio
+        PrincipalARN: !GetAtt EngineeringGroup.Arn
+        PrincipalType: "IAM"
+  DataAnalyticsPortfolio:
+    Type: "AWS::ServiceCatalog::Portfolio"
+    Properties:
+      Description: "A portfolio of data analytics."
+      DisplayName: "Data Analytics Portfolio"
+      ProviderName: !Ref Owner
+  DataAnalyticsPortfolioPrincipalAssociation:
+       Type: "AWS::ServiceCatalog::PortfolioPrincipalAssociation"
+       Properties:
+         PortfolioId: !Ref DataAnalyticsPortfolio
+         PrincipalARN: !GetAtt EngineeringGroup.Arn
+         PrincipalType: "IAM"
+  EndUserComputingPortfolio:
+    Type: "AWS::ServiceCatalog::Portfolio"
+    Properties:
+      Description: "A portfolio of self-service end user computing."
+      DisplayName: "End User Computing Portfolio"
+      ProviderName: !Ref Owner
+  EndUserComputingPortfolioPrincipalAssociation:
+       Type: "AWS::ServiceCatalog::PortfolioPrincipalAssociation"
+       Properties:
+         PortfolioId: !Ref EndUserComputingPortfolio
+         PrincipalARN: !GetAtt EngineeringGroup.Arn
+         PrincipalType: "IAM"
+  WordpressProduct:
+    Type: "AWS::ServiceCatalog::CloudFormationProduct"
+    Properties:
+      Name: "WordPress"
+      Description: "Highly Availabvle Wordpress by Bitnami - https://aws.amazon.com/quickstart/architecture/wordpress-high-availability-bitnami/"
+      Distributor: !Ref Distributor
+      Owner: !Ref Owner
+      SupportDescription: !Ref SupportDescription
+      SupportEmail: !Ref SupportEmail
+      SupportUrl: !Ref SupportUrl
+      ProvisioningArtifactParameters:
+        -
+          Name: "WordPress"
+          Description: "Highly Availabvle Wordpress by Bitnami, please refer https://aws.amazon.com/quickstart/architecture/wordpress-high-availability-bitnami/ for more details."
+          Info:
+            LoadTemplateFromURL: "https://aws-quickstart.s3.amazonaws.com/quickstart-bitnami-wordpress/templates/wordpress-master.template"
+  WordpresstoBusinessApplicationPortfolioProductAssociation:
+      Type: "AWS::ServiceCatalog::PortfolioProductAssociation"
+      Properties:
+        PortfolioId: !Ref BusinessApplicationPortfolio
+        ProductId: !Ref WordpressProduct
+  MagentoProduct:
+    Type: "AWS::ServiceCatalog::CloudFormationProduct"
+    Properties:
+      Name: "Magento"
+      Description: "Implements Magento, which is an open-source content management system for e-commerce websites."
+      Distributor: !Ref Distributor
+      Owner: !Ref Owner
+      SupportDescription: !Ref SupportDescription
+      SupportEmail: !Ref SupportEmail
+      SupportUrl: !Ref SupportUrl
+      ProvisioningArtifactParameters:
+        -
+          Name: "Magento"
+          Description: "Implements Magento, which is an open-source content management system for e-commerce websites.Please refer https://docs.aws.amazon.com/quickstart/latest/magento/welcome.html for more details."
+          Info:
+            LoadTemplateFromURL: "https://aws-quickstart.s3.amazonaws.com/quickstart-magento/templates/magento-master.template"
+  MagentotoBusinessApplicationPortfolioProductAssociation:
+      Type: "AWS::ServiceCatalog::PortfolioProductAssociation"
+      Properties:
+        PortfolioId: !Ref BusinessApplicationPortfolio
+        ProductId: !Ref MagentoProduct
+  DataAnalyticsProduct:
+    Type: "AWS::ServiceCatalog::CloudFormationProduct"
+    Properties:
+      Name: "Data Lake Foundation on AWS"
+      Description: "Data Lake Foundation on AWS - https://aws.amazon.com/quickstart/architecture/data-lake-foundation-with-aws-services/"
+      Distributor: !Ref Distributor
+      Owner: !Ref Owner
+      SupportDescription: !Ref SupportDescription
+      SupportEmail: !Ref SupportEmail
+      SupportUrl: !Ref SupportUrl
+      ProvisioningArtifactParameters:
+        -
+          Name: "Data Lake Foundation"
+          Description: "Data Lake Foundation on AWS - https://aws.amazon.com/quickstart/architecture/data-lake-foundation-with-aws-services/"
+          Info:
+            LoadTemplateFromURL: "https://aws-quickstart.s3.amazonaws.com/quickstart-datalake-foundation/templates/data-lake-master.template.yaml"
+  DataAnalyticsPortfolioProductAssociation:
+      Type: "AWS::ServiceCatalog::PortfolioProductAssociation"
+      Properties:
+        PortfolioId: !Ref DataAnalyticsPortfolio
+        ProductId: !Ref DataAnalyticsProduct
+  SimpleADProduct:
+    Type: "AWS::ServiceCatalog::CloudFormationProduct"
+    Properties:
+      Name: "Simple AD"
+      Description: "Simple AD"
+      Distributor: !Ref Distributor
+      Owner: !Ref Owner
+      SupportDescription: !Ref SupportDescription
+      SupportEmail: !Ref SupportEmail
+      SupportUrl: !Ref SupportUrl
+      ProvisioningArtifactParameters:
+        -
+          Name: "Simple AD"
+          Description: ""
+          Info:
+            LoadTemplateFromURL: "https://%%BUCKET_NAME%%-reference.s3.amazonaws.com/aws-blueprints/%%VERSION%%/SimpleAD-template.json"
+  SimpleADProductPortfolioProductAssociation:
+      Type: "AWS::ServiceCatalog::PortfolioProductAssociation"
+      Properties:
+        PortfolioId: !Ref EndUserComputingPortfolio
+        ProductId: !Ref SimpleADProduct
+  WorkspacesSimpleADProduct:
+    Type: "AWS::ServiceCatalog::CloudFormationProduct"
+    Properties:
+      Name: "Workspaces with Simple AD"
+      Description: "Workspaces with Simple AD"
+      Distributor: !Ref Distributor
+      Owner: !Ref Owner
+      SupportDescription: !Ref SupportDescription
+      SupportEmail: !Ref SupportEmail
+      SupportUrl: !Ref SupportUrl
+      ProvisioningArtifactParameters:
+        -
+          Name: "Workspaces with SimpleAD "
+          Description: ""
+          Info:
+            LoadTemplateFromURL: "https://%%BUCKET_NAME%%-reference.s3.amazonaws.com/aws-blueprints/%%VERSION%%/Workspaces-SimpleAD.template"
+  WorkspacesSimpleADProductPortfolioProductAssociation:
+      Type: "AWS::ServiceCatalog::PortfolioProductAssociation"
+      Properties:
+        PortfolioId: !Ref EndUserComputingPortfolio
+        ProductId: !Ref WorkspacesSimpleADProduct

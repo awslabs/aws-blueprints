@@ -1,0 +1,13 @@
+^dist/
+CODE_OF_CONDUCT.md:4
+CONTRIBUTING.md:50
+deployment/Workspaces-SimpleAD.yaml:92
+deployment/Workspaces-SimpleAD.yaml:122
+deployment/Workspaces-SimpleAD.yaml:131
+deployment/Workspaces-SimpleAD.yaml:161
+deployment/Workspaces-SimpleAD.yaml:177
+deployment/global-s3-assets/Workspaces-SimpleAD.template:92
+deployment/global-s3-assets/Workspaces-SimpleAD.template:122
+deployment/global-s3-assets/Workspaces-SimpleAD.template:131
+deployment/global-s3-assets/Workspaces-SimpleAD.template:161
+deployment/global-s3-assets/Workspaces-SimpleAD.template:177
