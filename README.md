@@ -8,6 +8,13 @@ AWS Blueprints offers a “1-Click solution deployment” framework (Figure 1) t
 AWS Control Tower (CT), AWS Organization, AWS Service Catalog and AWS Cloud Formation are some of the core AWS services used to build this AWS Blueprints framework
 
 ![image](https://user-images.githubusercontent.com/78975381/111203527-21483880-8593-11eb-92e8-d8134f1f9bef.png)
+# Solution Features
+
+SMB partner reference implementation: AWS partners can leverage this AWS Blueprints out-of-the box, or as a reference implementation that the partners can customize to meet the unique solution and support needs from the SMB customers.
+SMB focused solutions: The solutions that are specific to SMB customers are included as individual products under AWS service catalog portfolio.  We will continue to develop and add more products to this portfolio. The partners also can develop and add their own products in to the portfolio and also add products directly from the AWS Marketplace.
+One-click solution deployment: The products in the AWS service catalog portfolio can be deployed by a partner or a customer in a simple one step process. The portfolios can also be easily shared across an AWS account or an AWS organization.
+Automation & efficiency: Leverage the pre-built service catalog portfolio for deploying products and customize it as needed for your needs.
+Flexible deployment models: Deploy AWS blueprints under partner or customer managed AWS accounts. This flexibility allows this AWS Blueprints to be easily adapted by Managed service providers (MSP), value added resellers (VARs), distributors and customers
 
 # Deployment
 This solution uses AWS CloudFormation to automate the deployment of the Blueprints Service Catalog Portfolio framework in the AWS Cloud.
