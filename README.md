@@ -81,6 +81,17 @@ In Table 1, we have shown possible delivery model scenarios that an AWS partner 
 - 	An AWS account and console access with sufficient privileges to manipulate the required resources 
 -	Multi account structure is setup using Control Tower. If customer has already multi account structure is setup, same can be used
 
+# High level Deployment Steps
+ ## AWS Partner/Distributor
+ 1.	Launch a multi account environment with AWS Control Tower (Refer instructions)
+ 2.	Download the Blueprints CloudFormation template for Service Catalog from URL
+ 3.	Login to AWS Management account
+ 4.	Launch the downloaded CloudFormation stack
+ 5.	Open Service Catalog, assign product portfolio to one or more AWS accounts
+ ## AWS Partner/Customer
+ 1.	Login into Customer AWS account using the AWS management console
+ 2.	Go to the services and open Service Catalog
+ 3.	Under the Service Catalog, navigate to portfolios/products and launch the required products
 
 # Deployment
 This solution uses AWS CloudFormation to automate the deployment of the Blueprints Service Catalog Portfolio framework in the AWS Cloud.
