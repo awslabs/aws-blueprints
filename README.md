@@ -19,7 +19,39 @@ AWS Control Tower (CT), AWS Organization, AWS Service Catalog and AWS Cloud Form
 **Automation & efficiency:** Leverage the pre-built service catalog portfolio for deploying products and customize it as needed for your needs.
 
 **Flexible deployment models:** Deploy AWS blueprints under partner or customer managed AWS accounts. This flexibility allows this AWS Blueprints to be easily adapted by Managed service providers (MSP), value added resellers (VARs), distributors and customers
+# Architecture Overview
+As an AWS partner supporting SMB customers, setting up the AWS Control Tower in your
+management account is the first step and is the foundational block for this framework.
+Launching AWS Control Tower will deploy the following:
 
+- 2 organizational units, one for your shared accounts and one for accounts that will be
+provisioned by your users.
+
+- 3 shared accounts, which are the management account and isolated accounts for log
+archive and security audit.
+
+- A native cloud directory with preconfigured groups and single sign-on access.
+
+- 20 preventive guardrails to enforce policies and 2 detective guardrails to detect
+configuration violations
+![image](https://user-images.githubusercontent.com/78975381/111206305-32467900-8596-11eb-9383-4de72a949aa4.png)
+
+Deploying the Blueprints CloudFormation template (included in this solution) in the
+management account will set up the following as shown in Figure 2:
+
+- Service Catalog portfolio for business applications: Bitnami WordPress and Magento
+
+- Service catalog portfolio for End user computing: Amazon Workspaces and AWS
+directory service with simple AD
+
+- Service catalog portfolio for backup and disaster recovery: Veeam Backup for AWS
+Free Edition
+
+Once the different portfolios are deployed into the management account, they can readily be
+shared and assigned to the different member accounts. The management account is usually
+the partners account and the member accounts are usually the customer accounts. The
+customers can deploy their respective solutions assigned to them by the partner. More on
+this topic is discussed in the deployment models section.
 # Deployment
 This solution uses AWS CloudFormation to automate the deployment of the Blueprints Service Catalog Portfolio framework in the AWS Cloud.
 ## Prerequisites
