@@ -1,4 +1,5 @@
 {
+"Description" : "SO0147AD - AWS Blueprints Solution v1.0.0. This template creates SimpleAD",
   "Parameters": {
     "DomainName": {
       "Description": "FQDN of the domain for this directory",
@@ -31,8 +32,7 @@
     "SimpleADPW": {
       "Description": "Domain admin Password",
       "Type": "String",
-      "NoEcho": true,
-      "Default": ""
+      "NoEcho": true
     },
     "PrivateSubnet1": {
       "Description": "Subnet to be used for the Directoty",

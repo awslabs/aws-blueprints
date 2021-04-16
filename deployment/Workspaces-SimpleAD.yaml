@@ -1,3 +1,5 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: SO0147WS - AWS Blueprints Solution v1.0.0. This template creates users in simple AD and creates a workspace.
 Metadata:
   ? "AWS::CloudFormation::Interface"
   :
@@ -177,6 +179,13 @@ Resources:
               Resource: "*"
   LaunchWorkspacesLambda:
     Type: "AWS::Lambda::Function"
+    Metadata:
+      cfn_nag:
+        rules_to_suppress:
+          - id: W89
+            reason: "Lambda is created in default VPC"
+          - id: W92
+            reason: "Custom resource is run only during CF execution"
     Properties:
       Handler: "index.handler"
       Role:
@@ -211,15 +220,21 @@ Resources:
                   runningModeAutoStopTimeoutInMinutes =int(event['ResourceProperties']['RunningModeAutoStopTimeoutInMinutes'])
                   rootVolumeSizeGib =int(event['ResourceProperties']['RootVolumeSizeGib'])
                   userVolumeSizeGib =int(event['ResourceProperties']['UserVolumeSizeGib'])
-                  response=workdocs.create_user(
-                    OrganizationId=directoryId,
-                    Username=username,
-                    EmailAddress=emaildAddress,
-                    GivenName=firstName,
-                    Surname=lastName,
-                    Password=password
-                    )
-                  print(response)
+                  print("creating user")
+                  try:
+                    response=workdocs.create_user(
+                      OrganizationId=directoryId,
+                      Username=username,
+                      EmailAddress=emaildAddress,
+                      GivenName=firstName,
+                      Surname=lastName,
+                      Password=password
+                      )
+                    print(response)
+                  except workdocs.exceptions.EntityAlreadyExistsException as we:
+                    print("User already exists")
+                  except Exception as de:
+                    print(de)
                   response = workspaces.create_workspaces(
                    Workspaces=[
                     {
@@ -236,14 +251,18 @@ Resources:
                     },
                   ]
                  )
-                  print(response)
-                  sendResponseCfn(event, context, "SUCCESS")
+                  response = json.dumps(response)
+                  response = json.loads(response)
+                  if len(response["FailedRequests"]) == 0:
+                    sendResponseCfn(event, context, "SUCCESS","")
+                  else:
+                    sendResponseCfn(event, context, "FAILED",response['FailedRequests'][0]['ErrorMessage'])
               except Exception as e:
                   print(e)
                   sendResponseCfn(event, context, "FAILED")
-          def sendResponseCfn(event, context, responseStatus):
+          def sendResponseCfn(event, context, responseStatus,errormsg):
               response_body = {'Status': responseStatus,
-                              'Reason': 'Log stream name: ' + context.log_stream_name,
+                              'Reason': errormsg,
                               'PhysicalResourceId': context.log_stream_name,
                               'StackId': event['StackId'],
                               'RequestId': event['RequestId'],
@@ -251,7 +270,10 @@ Resources:
                               'Data': json.loads("{}")}
               responseData = {}
               responseData['Data'] = response_body
-              cfnresponse.send(event, context, cfnresponse.SUCCESS, responseData, "")
+              if(responseStatus == "SUCCESS"):
+                cfnresponse.send(event, context, cfnresponse.SUCCESS, responseData, "")
+              else:
+                cfnresponse.send(event, context, cfnresponse.FAILED, responseData, "")
   InvokeLaunchWorkspacesLambda:
     Type: "Custom::LambdaCallout"
     Properties:

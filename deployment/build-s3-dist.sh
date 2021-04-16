@@ -44,8 +44,8 @@ mkdir -p $build_dist_dir
 echo "------------------------------------------------------------------------------"
 echo "[Packing] Templates"
 echo "------------------------------------------------------------------------------"
-echo "cp $template_dir/*.template $template_dist_dir/"
-cp $template_dir/*.template $template_dist_dir/
+#echo "cp $template_dir/*.template $template_dist_dir/"
+#cp $template_dir/*.template $template_dist_dir/
 echo "copy yaml templates and rename"
 cp $template_dir/*.yaml $template_dist_dir/
 cp $template_dir/*.json $template_dist_dir/
@@ -66,10 +66,9 @@ sed -i '' -e $replace $template_dist_dir/*.template
 replace="s/%%VERSION%%/$3/g"
 echo "sed -i '' -e $replace $template_dist_dir/*.template"
 sed -i '' -e $replace $template_dist_dir/*.template
-
+touch dummy.zip
+cp dummy.zip $build_dist_dir/dummy.zip
+rm dummy.zip
 echo "------------------------------------------------------------------------------"
-echo "[Rebuild] Example Function"
+echo "[Done]"
 echo "------------------------------------------------------------------------------"
-cd $source_dir/example-function-js
-npm run build
-cp ./dist/example-function-js.zip $build_dist_dir/example-function-js.zip
