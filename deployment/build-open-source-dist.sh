@@ -40,6 +40,7 @@ echo "cp $source_template_dir/*.template $dist_template_dir/"
 cp $source_template_dir/*.template $dist_template_dir/
 echo "copy yaml templates and rename"
 cp $source_template_dir/*.yaml $dist_template_dir/
+cp $source_template_dir/*.json $dist_template_dir/
 cd $dist_template_dir
 # Rename all *.yaml to *.template
 for f in *.yaml; do
