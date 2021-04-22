@@ -1,0 +1,292 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: SO0147WS - AWS Blueprints Solution v1.0.0. This template creates users in simple AD and creates a workspace.
+Metadata:
+  ? "AWS::CloudFormation::Interface"
+  :
+   ParameterGroups:
+   -
+    Label:
+      default:"Directory Settings"
+    Parameters:
+      - DirectoryID
+   -
+    Label:
+      default:"Workspace Settings"
+    Parameters:
+      - BundleID
+      - ComputeTypeName
+      - RunningMode
+      - RunningModeAutoStopTimeoutInMinutes
+      - ComputeTypeName
+      - RootVolumeSizeGib
+      - UserVolumeSizeGib
+   -
+      Label:
+        default:"User Settings"
+      Parameters:
+        - Username
+        - EmailAddress
+        - FirstName
+        - Lastname
+        - Password
+   ParameterLabels:
+     DirectoryID:
+       default: "Enter Simple AD Directory ID"
+     BundleID:
+       default: "Workspace Bundle"
+     ComputeTypeName:
+       default: "Workspace Compute Type"
+     RunningMode:
+       default: "Workspace Running Mode"
+     RunningModeAutoStopTimeoutInMinutes:
+      default: "Workspace Auto stop Timeout In Minutes"
+     RootVolumeSizeGib:
+      default: "Workspace Root Volume Size(Gib). Root and user volume size (GB) must be (80|10), (80|50), (80|100), (175+|100+)"
+     UserVolumeSizeGib:
+      default: "Workspace User Volume Size(Gib). Root and user volume size (GB) must be (80|10), (80|50), (80|100), (175+|100+)"
+Parameters:
+  DirectoryID:
+    Type: 'String'
+  BundleID:
+    AllowedValues:
+      - "wsb-bh8rsxt14"
+      - "wsb-8vbljg4r6"
+      - "wsb-gm4d5tx2v"
+    Default: "wsb-bh8rsxt14"
+    Type: String
+  ComputeTypeName:
+    AllowedValues:
+      - "VALUE"
+      - "STANDARD"
+      - "PERFORMANCE"
+      - "POWER"
+      - "GRAPHICS"
+    Default: "VALUE"
+    Type: String
+  RunningMode:
+    AllowedValues:
+      - "AUTO_STOP"
+      - "ALWAYS_ON"
+    Default: "AUTO_STOP"
+    Type: String
+  RunningModeAutoStopTimeoutInMinutes:
+    Default: 60
+    Type: Number
+  RootVolumeSizeGib:
+    Default: 80
+    Type: Number
+  UserVolumeSizeGib:
+    Default: 50
+    Type: Number
+  Username:
+    Type: 'String'
+  EmailAddress:
+    Type: 'String'
+  FirstName:
+    Type: 'String'
+  Lastname:
+    Type: 'String'
+  Password:
+    NoEcho: 'True'
+    Type: 'String'
+Resources:
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Metadata:
+      cfn_nag:
+        rules_to_suppress:
+          - id: W11
+            reason: "Proving * ro Resourtce as resource ARN is not known.Workspace resources created at run time "
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+            - lambda.amazonaws.com
+          Action:
+          - sts:AssumeRole
+      Path: "/"
+      Policies:
+      - PolicyName: root
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          -
+            Action:
+            - "logs:CreateLogGroup"
+            - "logs:DeleteLogGroup"
+            - "logs:CreateLogStream"
+            - "logs:DeleteLogStream"
+            - "logs:PutLogEvents"
+            Effect: Allow
+            Resource: "*"
+          -
+            Action:
+            - "workdocs:DescribeUsers"
+            - "workdocs:CreateUser"
+            - "ds:DescribeDirectories"
+            - "ec2:DescribeVpcs"
+            - "ec2:DescribeSubnets"
+            Effect: Allow
+            Resource: "*"
+          -
+            Action:
+            -  "ds:DescribeTrusts"
+            -  "ds:DescribeDirectories"
+            -  "ec2:AuthorizeSecurityGroupEgress"
+            -  "ec2:AuthorizeSecurityGroupIngress"
+            -  "ec2:CreateNetworkInterface"
+            -  "ec2:CreateSecurityGroup"
+            -  "ec2:DeleteNetworkInterface"
+            -  "ec2:DeleteSecurityGroup"
+            -  "ec2:DescribeNetworkInterfaces"
+            -  "ec2:DescribeSubnets"
+            -  "ec2:DescribeVpcs"
+            -  "ec2:RevokeSecurityGroupEgress"
+            -  "ec2:RevokeSecurityGroupIngress"
+            -  "ec2:DescribeSecurityGroups"
+            -  "sns:GetTopicAttributes"
+            -  "sns:ListSubscriptions"
+            -  "sns:ListSubscriptionsByTopic"
+            -  "sns:ListTopics"
+            -  "iam:ListRoles"
+            -  "organizations:ListAccountsForParent"
+            -  "organizations:ListRoots"
+            -  "organizations:ListAccounts"
+            -  "organizations:DescribeOrganization"
+            -  "organizations:DescribeAccount"
+            -  "organizations:ListOrganizationalUnitsForParent"
+            -  "organizations:ListAWSServiceAccessForOrganization"
+            Effect: Allow
+            Resource: "*"
+          -
+              Action:
+              -  "workdocs:RemoveUserFromGroup"
+              -  "workdocs:AddUserToGroup"
+              -  "workspaces:ModifyWorkspaceProperties"
+              -  "workspaces:TerminateWorkspaces"
+              -  "workspaces:RebuildWorkspaces"
+              -  "workspaces:CreateWorkspaces"
+              -  "workspaces:StopWorkspaces"
+              -  "workspaces:CreateTags"
+              -  "workspaces:DeleteTags"
+              -  "workspaces:Describe*"
+              -  "workspaces:StartWorkspaces"
+              -  "workspaces:RebootWorkspaces"
+              Effect: Allow
+              Resource: "*"
+  LaunchWorkspacesLambda:
+    Type: "AWS::Lambda::Function"
+    Metadata:
+      cfn_nag:
+        rules_to_suppress:
+          - id: W89
+            reason: "Lambda is created in default VPC"
+          - id: W92
+            reason: "Custom resource is run only during CF execution"
+    Properties:
+      Handler: "index.handler"
+      Role:
+        Fn::GetAtt:
+          - "LambdaExecutionRole"
+          - "Arn"
+      Runtime: "python3.8"
+      # we give the function a large timeout
+      # so we can wait for the bucket to be empty
+      Timeout: 600
+      Code:
+        ZipFile: |
+          #!/usr/bin/env python
+          # -*- coding: utf-8 -*-
+          import json
+          import boto3
+          import cfnresponse
+          workdocs = boto3.client('workdocs')
+          workspaces = boto3.client('workspaces')
+          def handler(event, context):
+            # This comment was added to force an update on this function's code
+              try:
+                  directoryId=event['ResourceProperties']['DirectoryID']
+                  username=event['ResourceProperties']['Username']
+                  emaildAddress=event['ResourceProperties']['EmailAddress']
+                  firstName=event['ResourceProperties']['FirstName']
+                  lastName=event['ResourceProperties']['Lastname']
+                  password=event['ResourceProperties']['Password']
+                  bundleID=event['ResourceProperties']['BundleID']
+                  computeTypeName=event['ResourceProperties']['ComputeTypeName']
+                  runningMode =event['ResourceProperties']['RunningMode']
+                  runningModeAutoStopTimeoutInMinutes =int(event['ResourceProperties']['RunningModeAutoStopTimeoutInMinutes'])
+                  rootVolumeSizeGib =int(event['ResourceProperties']['RootVolumeSizeGib'])
+                  userVolumeSizeGib =int(event['ResourceProperties']['UserVolumeSizeGib'])
+                  print("creating user")
+                  try:
+                    response=workdocs.create_user(
+                      OrganizationId=directoryId,
+                      Username=username,
+                      EmailAddress=emaildAddress,
+                      GivenName=firstName,
+                      Surname=lastName,
+                      Password=password
+                      )
+                    print(response)
+                  except workdocs.exceptions.EntityAlreadyExistsException as we:
+                    print("User already exists")
+                  except Exception as de:
+                    print(de)
+                  response = workspaces.create_workspaces(
+                   Workspaces=[
+                    {
+                      'DirectoryId': directoryId,
+                      'UserName': username,
+                      'BundleId': bundleID,
+                      'WorkspaceProperties': {
+                          'RunningMode': runningMode,
+                          'RunningModeAutoStopTimeoutInMinutes': runningModeAutoStopTimeoutInMinutes,
+                          'RootVolumeSizeGib': rootVolumeSizeGib,
+                          'UserVolumeSizeGib': userVolumeSizeGib,
+                          'ComputeTypeName': computeTypeName
+                          }
+                    },
+                  ]
+                 )
+                  response = json.dumps(response)
+                  response = json.loads(response)
+                  if len(response["FailedRequests"]) == 0:
+                    sendResponseCfn(event, context, "SUCCESS","")
+                  else:
+                    sendResponseCfn(event, context, "FAILED",response['FailedRequests'][0]['ErrorMessage'])
+              except Exception as e:
+                  print(e)
+                  sendResponseCfn(event, context, "FAILED")
+          def sendResponseCfn(event, context, responseStatus,errormsg):
+              response_body = {'Status': responseStatus,
+                              'Reason': errormsg,
+                              'PhysicalResourceId': context.log_stream_name,
+                              'StackId': event['StackId'],
+                              'RequestId': event['RequestId'],
+                              'LogicalResourceId': event['LogicalResourceId'],
+                              'Data': json.loads("{}")}
+              responseData = {}
+              responseData['Data'] = response_body
+              if(responseStatus == "SUCCESS"):
+                cfnresponse.send(event, context, cfnresponse.SUCCESS, responseData, "")
+              else:
+                cfnresponse.send(event, context, cfnresponse.FAILED, responseData, "")
+  InvokeLaunchWorkspacesLambda:
+    Type: "Custom::LambdaCallout"
+    Properties:
+      ServiceToken: !GetAtt LaunchWorkspacesLambda.Arn
+      DirectoryID: !Ref DirectoryID
+      Username: !Ref Username
+      EmailAddress: !Ref EmailAddress
+      FirstName: !Ref FirstName
+      Lastname: !Ref Lastname
+      Password: !Ref Password
+      BundleID: !Ref BundleID
+      ComputeTypeName: !Ref ComputeTypeName
+      RunningMode: !Ref RunningMode
+      RunningModeAutoStopTimeoutInMinutes: !Ref RunningModeAutoStopTimeoutInMinutes
+      RootVolumeSizeGib: !Ref RootVolumeSizeGib
+      UserVolumeSizeGib: !Ref UserVolumeSizeGib
