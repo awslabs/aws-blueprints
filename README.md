@@ -1,10 +1,34 @@
 # AWS Blueprints
-The AWS cloud provides many of the building blocks required to help customers implement a secure, flexible self-serving solution to launch AWS services and solutions. This solution in intended to address customers pain point around the need to have sophisticated AWS builders and developers to develop a solution that is needed for their business. This solution automatically configures the core AWS foundational blocks that include a multi-account AWS environment, account factory to create new AWS accounts in a click, security and governance already built in for these accounts. This solution also adds a catalog where new AWS services, solutions are added and can be readily shared within an account or to a different account.
+AWS Blueprints consists of portfolios of tested and validated AWS services and third-party
+applications that AWS Distributors (which include managed service providers (MSPs) and
+value-added resellers (VARs)) and AWS Solution Providers can use to deploy, manage, and
+monitor solutions for their small and medium business (SMB) customers in the AWS Cloud.
+As shown in Figure 1, this solution deploys repeatable, scalable portfolios using AWS Service
+Catalog, which includes a mix of AWS services and third-party applications. Additionally,
+AWS Distributors and AWS Solution Providers can extend this solution by integrating their
+own value-added capabilities.
 
-AWS control tower (CT) is leveraged to create an automated landing zone that employs best-practices such as configuring multi-account structure using AWS Organizations, managing user identities and federated access with AWS Single Sign-on, enabling account provisioning through AWS Service Catalog, and creating a centralized log archive using AWS CloudTrail and AWS Config. AWS Guardrail is used for ongoing governance, pre-configured guardrails can be enabled to clearly define rules for security, operations, and compliance which prevents deployment of resources that don’t conform to policies and continuously monitor deployed resources for nonconformance.
-
-Finally, AWS CloudFormation (CF) templates are used to add new products, portfolios to the AWS Service Catalog. The CF templates can be custom developed by an organization or adopted from the AWS Quick starts which can be readily launched by the customers. There are thousands of Independent Software Vendor (ISV) products available via AWS Marketplace offered by AWS partners that can be deployed as a service catalog product to quickly extend the solution offerings in your AWS account.
-
+This solution offers the following features:
+* Customizable and extensible pre-packaged portfolios: As shown in Figure 1, AWS
+Distributors and AWS Solution Providers can use this solution as a reference
+implementation to customize the catalog of services that will meet the unique demands
+of SMB customers. AWS Distributors and AWS Solution Providers can develop and add
+their own products to the portfolio and also add products directly from AWS Marketplace.
+This solution deploys AWS services and applications organized into portfolios, including
+Digital Presence, Data & Analytics, and Remote Work & Collaboration.Additionally, Independent Software Vendor (ISV) products from AWS Marketplace can be
+created in custom portfolios. Three examples are shown in Figure 1, including Veeam
+Backup for AWS Free Edition, Veritas Backup Exec™ for AWS, and Trend Micro Deep
+Security.
+* SMB focused solutions: This solution deploys AWS services and third-party
+applications using AWS Service Catalog that are SMB-focused.
+* Automated solution deployment: AWS Distributors and AWS Solution Providers can
+deploy multiple configurations of the AWS services and third-party applications in the
+AWS Service Catalog portfolio using an automated process. The portfolio can be shared
+across AWS accounts or within AWS Organizations for a customer account.
+Additionally, this solution offers flexible deployment and delivery models to AWS Distributors
+and AWS Solution Providers when deploying to customer-managed AWS accounts. For
+information about these flexible models, refer to the Deployment models and Delivery model
+sections in this guide.
 
 # Deployment
 This solution uses AWS CloudFormation to automate the deployment of the Blueprints Service Catalog Portfolio framework in the AWS Cloud.
