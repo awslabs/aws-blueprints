@@ -29,7 +29,24 @@ Additionally, this solution offers flexible deployment and delivery models to AW
 and AWS Solution Providers when deploying to customer-managed AWS accounts. For
 information about these flexible models, refer to the Deployment models and Delivery model
 sections in this guide.
-
+# Architecture overview
+Deploying this solution with the default parameters builds the following environment in the
+AWS Cloud
+![image](https://user-images.githubusercontent.com/78975381/115787301-98899d00-a387-11eb-82e0-4cafcf17504c.png)
+The AWS CloudFormation template deploys AWS Service Catalog and pre-packaged
+portfolios in your AWS management account. AWS Service Catalog allows you to package
+AWS services and third-party applications into portfolios, which can then be managed and
+deployed to your customers.
+AWS Service Catalog is deployed with the following portfolios:
+* Digital Presence, which includes Magento and WordPress.
+* Data & Analytics, which includes Data Lake Foundation on AWS.
+* Remote Work & Collaboration, which includes: Simple Active Directory (AD) and Amazon
+WorkSpaces
+Independent Software Vendor (ISV) products from AWS Marketplace can be created in
+custom portfolios. For example:
+* Backup and Recovery portfolio, with products such as: Veeam Backup for AWS Free
+Edition and Veritas Backup Exec™ for AWS.
+* Security portfolio, with products such as: Trend Micro Deep Security.
 # Deployment
 This solution uses AWS CloudFormation to automate the deployment of the Blueprints Service Catalog Portfolio framework in the AWS Cloud.
 ## Prerequisites
