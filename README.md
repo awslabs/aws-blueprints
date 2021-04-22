@@ -63,6 +63,15 @@ AWS highly recommends that you set up AWS Control Tower in your AWS management a
 *	Self-service for locating the products they are authorized to use.
 *	Fine grain access control – portfolio access managed by IAM.
 *	Extensibility and version control - updating a product to a new version propagates the update to all products in every portfolio that references it.
+![image](https://user-images.githubusercontent.com/78975381/115788314-139f8300-a389-11eb-869e-357c4617aac4.png)
+If you are deploying in an AWS Control Tower account, you need IAM administrator access to the AWS management account.
+If you do not have AWS Control Tower deployed in your AWS management account, refer to Getting Started with AWS Control Tower in the AWS Control Tower User Guide.
+When setting up AWS Control Tower, deploy the following resources:
+*	Two organizational units (OUs), one for your shared accounts and one for accounts that will be provisioned by your customers.
+*	Three shared accounts, which are the management account and isolated accounts for archive logging and security audits.
+*	A native cloud directory with preconfigured groups and single sign-on (SSO) access.
+*	20 preventive guardrails to enforce policies and two detective guardrails to detect configuration violations.
+NOTE: AWS Control Tower is not currently available in all AWS Regions. Therefore, if you use this service, you must launch this solution in an AWS Region where AWS Control Tower is available. For the most current availability by Region, refer to the AWS Regional Services List.
 
 # Deployment
 This solution uses AWS CloudFormation to automate the deployment of the Blueprints Service Catalog Portfolio framework in the AWS Cloud.
