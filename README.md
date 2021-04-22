@@ -52,17 +52,17 @@ Edition and Veritas Backup Exec™ for AWS.
 Prior to deploying AWS Blueprints, you need to choose a method to centralize the management of the AWS Service Catalog portfolios provided by this solution. You can use either AWS Control Tower or AWS Organizations for the management capabilities.
 ### (Recommended) Deploying with AWS Control Tower
 AWS highly recommends that you set up AWS Control Tower in your AWS management account before deploying AWS Blueprints. AWS Control Tower can be leveraged as the centralized foundation for account management, account security and manage customer accounts at scale. AWS Control Tower with AWS Service Catalog provides the following capabilities and features for AWS Blueprints:
-•	A well-architected landing zone, a multi-account structure using AWS Organizations that incorporates best practices for security and compliance.
-•	Provisioning and account management using Account Factory containing the appropriate user group permissions; provisioners can specify standardized baselines and network configurations for all accounts in your organization.
-•	Identity management using AWS Single Sign-On (AWS SSO) default directory.
-•	Federated access to accounts using AWS SSO.
-•	Centralized logging from AWS CloudTrail, and AWS Config stored in Amazon Simple Storage Service (Amazon S3)
-•	Cross-account security audits using AWS IAM and AWS SSO.
-•	A solutions implementation, Customizations for AWS Control Tower, that combines AWS Control Tower and other highly-available, trusted AWS services to help customers set up a secure, multi-account AWS environment using AWS best practices.
-•	Standardization for the administration and management of approved templates, standardized across the organization.
-•	Self-service for locating the products they are authorized to use.
-•	Fine grain access control – portfolio access managed by IAM.
-•	Extensibility and version control - updating a product to a new version propagates the update to all products in every portfolio that references it.
+* A well-architected landing zone, a multi-account structure using AWS Organizations that incorporates best practices for security and compliance.
+*	Provisioning and account management using Account Factory containing the appropriate user group permissions; provisioners can specify standardized baselines and network configurations for all accounts in your organization.
+*	Identity management using AWS Single Sign-On (AWS SSO) default directory.
+*	Federated access to accounts using AWS SSO.
+*	Centralized logging from AWS CloudTrail, and AWS Config stored in Amazon Simple Storage Service (Amazon S3)
+*	Cross-account security audits using AWS IAM and AWS SSO.
+*	A solutions implementation, Customizations for AWS Control Tower, that combines AWS Control Tower and other highly-available, trusted AWS services to help customers set up a secure, multi-account AWS environment using AWS best practices.
+*	Standardization for the administration and management of approved templates, standardized across the organization.
+*	Self-service for locating the products they are authorized to use.
+*	Fine grain access control – portfolio access managed by IAM.
+*	Extensibility and version control - updating a product to a new version propagates the update to all products in every portfolio that references it.
 
 # Deployment
 This solution uses AWS CloudFormation to automate the deployment of the Blueprints Service Catalog Portfolio framework in the AWS Cloud.
