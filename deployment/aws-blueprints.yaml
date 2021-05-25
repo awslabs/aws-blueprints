@@ -8,7 +8,6 @@
 # HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
 AWSTemplateFormatVersion: "2010-09-09"
 Description: SO0147ADBP - AWS Blueprints Solution v1.0.0. This template creates a portfolio that contains business applications with constraints and shares it with an AWS IAM group.
 Parameters:
